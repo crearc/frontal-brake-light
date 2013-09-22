@@ -6,20 +6,42 @@
 
     <script type="text/javascript" charset="utf-8" src="jquery.min.js"></script>
     <script type="text/javascript" charset="utf-8">
-   
-    // Wait for PhoneGap to load
+
+    // The watch id references the current `watchAcceleration`
+    var watchID = null;
+
+    // Wait for device API libraries to load
     //
     document.addEventListener("deviceready", onDeviceReady, false);
 
-    // PhoneGap is ready
+    // device APIs are available
     //
     function onDeviceReady() {
-        navigator.accelerometer.getCurrentAcceleration(onSuccess, onError);
+        startWatch();
+    }
+
+    // Start watching the acceleration
+    //
+    function startWatch() {
+
+        // Update acceleration every 3 seconds
+        var options = { frequency: 1000 };
+
+        watchID = navigator.accelerometer.watchAcceleration(onSuccess, onError, options);
+    }
+
+    // Stop watching the acceleration
+    //
+    function stopWatch() {
+        if (watchID) {
+            navigator.accelerometer.clearWatch(watchID);
+            watchID = null;
+        }
     }
 
     // onSuccess: Get a snapshot of the current acceleration
     //
-    function onSuccess() {
+    function onSuccess(acceleration) {
         var element = document.getElementById('accelerometer');
         element.innerHTML = 'Acceleration X: ' + acceleration.x + '<br />' +
                             'Acceleration Y: ' + acceleration.y + '<br />' +
@@ -48,7 +70,7 @@
     
     </style>
   </head>
-  <body>
+  <body onload="onLoad()">
     <div id="accelerometer">Waiting for accelerometer...</div>
   </body>
 </html>
