@@ -14,6 +14,10 @@
     //
     document.addEventListener("deviceready", onDeviceReady, false);
 
+    $('.start').on('click', function() {
+        onDeviceReady();
+    });
+
     // device APIs are available
     //
     function onDeviceReady() {
@@ -72,5 +76,6 @@
   </head>
   <body onload="onLoad()">
     <div id="accelerometer">Waiting for accelerometer...</div>
+    <a class="start" href="#">Start</a>
   </body>
 </html>
